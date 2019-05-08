@@ -1,11 +1,19 @@
+import 'package:e_randevu/models/Hastane.dart';
+import 'package:e_randevu/utils/DBHelper.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  DBHelper dbHelper;
+  List<Hastane> hastaneler;
+
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    hastanleriGetir();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -22,6 +30,12 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
+  }
+  Future<void> hastanleriGetir()async
+  {
+    dbHelper=DBHelper();
+    hastaneler= await dbHelper.getHastaneler();
+    print(hastaneler[0].hastaneAdi);
   }
 }
 

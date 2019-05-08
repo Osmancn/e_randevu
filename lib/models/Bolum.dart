@@ -15,7 +15,7 @@ class Bolum{
 
   Bolum.fromMap(Map<String,dynamic> map)
   {
-    _bolumID=int.parse(map['bolumID']);
+    _bolumID=int.parse(map['bolumID'].toString());
     bolumAdi=map['bolumAdi'];
   }
 
