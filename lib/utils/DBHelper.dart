@@ -140,7 +140,7 @@ class DBHelper {
 
   }
 
-  getHastaByID(int id)async
+  Future<Hasta> getHastaByID(int id)async
   {
     var db=await _getDataBase();
     var hastaMap=await db.query("tbl_Hasta",where: 'hastaID = ?',whereArgs: [id]);

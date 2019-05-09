@@ -1,6 +1,7 @@
 import 'package:e_randevu/GirisSayfasi.dart';
 import 'package:e_randevu/HastaAnaSayfa.dart';
 import 'package:e_randevu/KayitOl.dart';
+import 'package:e_randevu/RandevuSayfasi.dart';
 import 'package:e_randevu/models/Hasta.dart';
 import 'package:e_randevu/models/Hastane.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         "/": (context) => GirisSayfasi(),
         "/KayitOl": (context) => KayitOl(),
         "/GirisSayfasi":(context)=>GirisSayfasi(),
+        "/RandevuSayfasi":(context)=>RandevuSayfasi(),
       },
       onGenerateRoute: (route){
         var split=route.name.split("/");
