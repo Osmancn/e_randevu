@@ -1,5 +1,3 @@
-
-
 import 'package:e_randevu/models/Doktor.dart';
 
 class Hasta{
@@ -9,14 +7,15 @@ class Hasta{
   String TC;
   String sifre;
   String email;
+  String cinsiyet;
   List<Doktor> favoriDoktorlar=List<Doktor>();
 
   int get hastaId => _hastaId;
 
-  Hasta(this.ad, this.soyad, this.TC, this.sifre, this.email);
+  Hasta(this.ad, this.soyad, this.TC, this.sifre, this.email,this.cinsiyet);
 
   Hasta.withID(this._hastaId, this.ad, this.soyad, this.TC, this.sifre,
-      this.email);
+      this.email,this.cinsiyet);
 
   Hasta.fromMap(Map<String,dynamic> map)
   {
@@ -26,6 +25,7 @@ class Hasta{
     this.TC = map['hastaTC'].toString();
     this.sifre = map['hastaSifre'].toString();
     this.email = map['hastaEmail'].toString();
+    this.cinsiyet = map['erkekmi']==1?"erkek":"kadın";
   }
 
   Map<String,dynamic> toMap()
@@ -36,6 +36,7 @@ class Hasta{
     map['hastaTC'] = TC;
     map['hastaSifre'] = sifre;
     map['hastaEmail'] =email;
+    map['erkekmi']=cinsiyet=="erkek"?"1":"0";
     return map;
   }
 
