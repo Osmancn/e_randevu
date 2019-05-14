@@ -148,7 +148,7 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
   Future<bool> tcKontrol(String tc) async {
     var db = DBHelper();
     var hasta = await db.getHastaByTc(tc);
-    if (hasta == null)
+    if (hasta == null||hasta.sifre!=_sifre)
       return false;
     else {
       _hastaID = hasta.hastaId;

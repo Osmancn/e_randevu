@@ -18,38 +18,77 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
 
   @override
   void initState() {
-    HastayiGetir(HastaAnaSayfa.hastaID).then((h) {
-      setState(() {
-        hasta = h;
+      HastayiGetir(HastaAnaSayfa.hastaID).then((h) {
+        setState(() {
+          hasta = h;
+        });
       });
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Ana Sayfa"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Text("ad soyad :" + hasta.ad + " " + hasta.soyad),
-                Text("tc : " + hasta.TC),
-              ],
-            ),
-            RaisedButton(
-              child: Text("Randevu Al"),
-              color: Colors.green.shade300,
-              onPressed: () {
-                Navigator.pushNamed(context, "/RandevuSayfasi");
-              },
-            )
-          ],
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(false);
+      },
+      child: Scaffold(
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text("" + hasta.ad + " " + hasta.soyad),
+                accountEmail: Text("" + hasta.email),
+                currentAccountPicture: CircleAvatar(
+                  child: Center(
+                      child: Text(
+                    "" + hasta.ad[0],
+                    style: TextStyle(fontSize: 40),
+                  )),
+                  backgroundColor: Colors.blue.shade500,
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, "/RandevuSayfasi");
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.add),
+                        title: Text("Randevu Al"),
+                        trailing: Icon(Icons.navigate_next),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          title: Text("Ana Sayfa"),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Text("ad soyad :" + hasta.ad + " " + hasta.soyad),
+                  Text("tc : " + hasta.TC),
+                ],
+              ),
+              RaisedButton(
+                child: Text("Randevu Al"),
+                color: Colors.green.shade300,
+                onPressed: () {
+                  Navigator.pushNamed(context, "/RandevuSayfasi");
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

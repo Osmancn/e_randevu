@@ -266,18 +266,68 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                     _secilenBolum != null &&
                     _secilenDoktor != null &&
                     _secilenSaatId != null) {
-                  debugPrint("doktor : ${_secilenDoktor.doktorID}\n" +
-                      "hasta : ${HastaAnaSayfa.hastaID}" +
-                      "tarih : $_secilenTarihString\n" +
-                      "saatID : $_secilenSaatId");
-                  RandevuAl(Randevu(
-                      _secilenDoktor.doktorID,
-                      HastaAnaSayfa.hastaID,
-                      _secilenTarihString,
-                      true,
-                      _secilenSaatId)).then((value){
-                        debugPrint("\nrandevu ID :"+value.toString());
-                  });
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                        elevation: 10,
+                        backgroundColor: Colors.white,
+                        title: Text("Randevu Onayla"),
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Text("Hastane : ${_secilenHastane.hastaneAdi}\n" +
+                                  "Hastane Adresi : ${_secilenHastane.hastaneAdresi}\n" +
+                                  "Bölüm : ${_secilenBolum.bolumAdi}\n" +
+                                  "Doktor : ${_secilenDoktor.ad} ${_secilenDoktor.soyad}\n" +
+                                  "Tarih : ${_secilenTarihString}\n" +
+                                  "Saat : ${saatAraligi[_secilenSaatId - 1]}"),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  RaisedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    color: Colors.red.shade500,
+                                    child: Text("Vazgeç"),
+                                    elevation: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  RaisedButton(
+                                    onPressed: () {
+                                      RandevuAl(Randevu(
+                                              _secilenDoktor.doktorID,
+                                              HastaAnaSayfa.hastaID,
+                                              _secilenTarihString,
+                                              true,
+                                              _secilenSaatId))
+                                          .then(
+                                        (value) {
+                                          Navigator.pushNamed(context,
+                                              "/HastaAnaSayfa/${HastaAnaSayfa.hastaID}");
+                                        },
+                                      );
+                                    },
+                                    color: Colors.green.shade500,
+                                    child: Text("Randevu Al"),
+                                    elevation: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    },
+                  );
                 } else {
                   setState(() {
                     _validator = "Lütfen bütün alanları doldurunuz";
