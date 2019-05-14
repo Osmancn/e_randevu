@@ -274,7 +274,7 @@ class _KayitOlState extends State<KayitOl> {
                     if (_KayitOnayla() && _cinsiyet != null) {
                       tcKontrol(_controllerTc.text.toString()).then((kontrol) {
                         if (kontrol) {
-                          var hasta = Hasta(_ad.toString(), _soyad, _tc, _sifre,
+                          var hasta = Hasta(_ad, _soyad, _controllerTc.text.toString(), _sifre,
                               _email, _cinsiyet);
                           hastaEkle(hasta).then((hastaID) {
                             Navigator.pushNamed(

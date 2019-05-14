@@ -1,6 +1,7 @@
 class Doktor{
 
   int _doktorID;
+  int hastanedekiBolumlerID;
   String ad;
   String soyad;
   String TC;
@@ -10,10 +11,10 @@ class Doktor{
   int get doktorID => _doktorID;
 
   Doktor(this.ad, this.soyad, this.TC, this.sifre,
-      this.email);
+      this.email,this.hastanedekiBolumlerID);
 
   Doktor.withID(this._doktorID, this.ad, this.soyad,
-      this.TC, this.sifre, this.email);
+      this.TC, this.sifre, this.email,this.hastanedekiBolumlerID);
 
   Doktor.fromMap(Map<String,dynamic> map)
   {
@@ -23,6 +24,7 @@ class Doktor{
     this.TC = map['doktorTC'].toString();
     this.sifre = map['doktorSifre'].toString();
     this.email = map['doktorEmail'].toString();
+    this.hastanedekiBolumlerID=int.parse(map['hastanedekiBolumlerID'].toString());
   }
 
   Map<String,dynamic> toMap()
@@ -33,7 +35,7 @@ class Doktor{
     map['doktorTC'] = TC;
     map['doktorSifre'] = sifre;
     map['doktorEmail'] = email;
-    //todo hastanedeki bolumleri ekle
+    map['hastanedekiBolumlerID']=hastanedekiBolumlerID;
     return map;
   }
 }

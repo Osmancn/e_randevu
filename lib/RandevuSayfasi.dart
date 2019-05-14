@@ -1,6 +1,8 @@
+import 'package:e_randevu/HastaAnaSayfa.dart';
 import 'package:e_randevu/models/Bolum.dart';
 import 'package:e_randevu/models/Doktor.dart';
 import 'package:e_randevu/models/Hastane.dart';
+import 'package:e_randevu/models/Randevu.dart';
 import 'package:e_randevu/utils/DBHelper.dart';
 import 'package:flutter/material.dart';
 
@@ -15,21 +17,40 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
   Bolum _secilenBolum;
   Doktor _secilenDoktor;
   DateTime _secilenTarih = DateTime.now();
+  String _secilenTarihString = "";
+  int _secilenSaatId;
   List<DropdownMenuItem<Hastane>> _dDMenuItemHastane;
   List<DropdownMenuItem<Bolum>> _dDMenuItemBolum;
   List<DropdownMenuItem<Doktor>> _dDMenuItemDoktor;
+  List<String> saatAraligi;
+  List<bool> saatAktif;
 
   String _validator = "";
 
   @override
   void initState() {
     // TODO: implement initState
-    HastaleriGetir().then((hstneler){
+    HastaleriGetir().then((hstneler) {
       setState(() {
-        hastaneler=hstneler;
+        hastaneler = hstneler;
         _dDMenuItemHastane = getDropDownMenuHastane();
       });
     });
+    saatAraligi = List<String>(14);
+    saatAraligiGetir().then((value) {
+      setState(() {
+        saatAraligi = value;
+      });
+    });
+    setState(() {
+      _secilenTarihString = "" +
+          _secilenTarih.day.toString() +
+          "." +
+          _secilenTarih.month.toString() +
+          "." +
+          _secilenTarih.year.toString();
+    });
+    saatAktif = List<bool>(14);
     super.initState();
   }
 
@@ -40,6 +61,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
       body: ListView(
         children: <Widget>[
           SizedBox(height: 40),
+          //Başlık
           Center(
             child: Text(
               "Randevu",
@@ -49,6 +71,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                   color: Colors.green),
             ),
           ),
+          //cbbox Hastane
           Container(
             margin: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
             child: Row(
@@ -73,6 +96,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                           _dDMenuItemDoktor.clear();
                         _secilenDoktor = null;
                         _dDMenuItemBolum = getDropDownMenuBolum();
+                        _secilenSaatId = null;
                       });
                     },
                     value: _secilenHastane,
@@ -81,6 +105,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
               ],
             ),
           ),
+          //cbbox Bolum
           Container(
             margin: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
             child: Row(
@@ -103,6 +128,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                           _dDMenuItemDoktor.clear();
                         _secilenDoktor = null;
                         _dDMenuItemDoktor = getDropDownMenuDoktor();
+                        _secilenSaatId = null;
                       });
                     },
                     value: _secilenBolum,
@@ -111,6 +137,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
               ],
             ),
           ),
+          //cbbox doktor
           Container(
             margin: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
             child: Row(
@@ -128,7 +155,14 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                     items: _dDMenuItemDoktor,
                     onChanged: (value) {
                       setState(() {
+                        _secilenSaatId = null;
                         _secilenDoktor = value;
+                        saatAktifGetir(value.doktorID, _secilenTarihString)
+                            .then((value) {
+                          setState(() {
+                            saatAktif = value;
+                          });
+                        });
                       });
                     },
                     value: _secilenDoktor,
@@ -137,9 +171,8 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
               ],
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          //Tarih
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -148,12 +181,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                 style: TextStyle(fontSize: 18, color: Colors.green.shade700),
               ),
               Text(
-                "" +
-                    _secilenTarih.day.toString() +
-                    "." +
-                    _secilenTarih.month.toString() +
-                    "." +
-                    _secilenTarih.year.toString(),
+                _secilenTarihString,
                 style: TextStyle(fontSize: 18, color: Colors.black),
               ),
               GestureDetector(
@@ -171,7 +199,24 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                               DateTime.now().month + 3, DateTime.now().day))
                       .then((secilenTrh) {
                     setState(() {
-                      if (secilenTrh != null) _secilenTarih = secilenTrh;
+                      if (secilenTrh != null) {
+                        _secilenTarih = secilenTrh;
+                        _secilenSaatId = null;
+                      }
+                      _secilenTarihString = "" +
+                          _secilenTarih.day.toString() +
+                          "." +
+                          _secilenTarih.month.toString() +
+                          "." +
+                          _secilenTarih.year.toString();
+                      if (_secilenDoktor != null)
+                        saatAktifGetir(
+                                _secilenDoktor.doktorID, _secilenTarihString)
+                            .then((value) {
+                          setState(() {
+                            saatAktif = value;
+                          });
+                        });
                     });
                   });
                 },
@@ -179,6 +224,24 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
             ],
           ),
           SizedBox(height: 20),
+          //randevu saati
+          Container(
+            child: ExpansionTile(
+                title: Center(
+                  child: Text(
+                    "Randevu Saati",
+                    style:
+                        TextStyle(fontSize: 18, color: Colors.green.shade700),
+                  ),
+                ),
+                children: <Widget>[
+                  saatler(),
+                ]),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          //validator
           Center(
             child: Text(
               _validator,
@@ -188,6 +251,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
               ),
             ),
           ),
+          //randevu buton
           Container(
             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 80),
             child: RaisedButton.icon(
@@ -200,10 +264,20 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
               onPressed: () {
                 if (_secilenDoktor != null &&
                     _secilenBolum != null &&
-                    _secilenDoktor != null) {
-                  debugPrint("hastane : ${_secilenHastane.hastaneAdi}\n" +
-                      "bölüm : ${_secilenBolum.bolumAdi}\n" +
-                      "doktor : ${_secilenDoktor.ad} ${_secilenDoktor.soyad}");
+                    _secilenDoktor != null &&
+                    _secilenSaatId != null) {
+                  debugPrint("doktor : ${_secilenDoktor.doktorID}\n" +
+                      "hasta : ${HastaAnaSayfa.hastaID}" +
+                      "tarih : $_secilenTarihString\n" +
+                      "saatID : $_secilenSaatId");
+                  RandevuAl(Randevu(
+                      _secilenDoktor.doktorID,
+                      HastaAnaSayfa.hastaID,
+                      _secilenTarihString,
+                      true,
+                      _secilenSaatId)).then((value){
+                        debugPrint("\nrandevu ID :"+value.toString());
+                  });
                 } else {
                   setState(() {
                     _validator = "Lütfen bütün alanları doldurunuz";
@@ -217,11 +291,22 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
     );
   }
 
-  Future<List<Hastane>> HastaleriGetir()async
-  {
+  Future<List<Hastane>> HastaleriGetir() async {
     var db = await DBHelper();
-    var hastanelerr=await db.getHastaneler();
+    var hastanelerr = await db.getHastaneler();
     return hastanelerr;
+  }
+
+  Future<List<String>> saatAraligiGetir() async {
+    var db = await DBHelper();
+    var s = await db.getSaatAraligi();
+    return s;
+  }
+
+  Future<List<bool>> saatAktifGetir(int doktorID, String gun) async {
+    var db = await DBHelper();
+    var s = await db.getSaatAktif(doktorID, gun);
+    return s;
   }
 
   List<DropdownMenuItem<Hastane>> getDropDownMenuHastane() {
@@ -258,5 +343,72 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
       ));
     }
     return ddMenuDoktor;
+  }
+
+  Color saatAraligiRenk(int index) {
+    if (saatAktif[index] == false) return Colors.red.shade300;
+    if (_secilenSaatId == index + 1) return Colors.green.shade300;
+    return Colors.white;
+  }
+
+  bool doktorSecildimi() {
+    if (_secilenDoktor != null)
+      return true;
+    else
+      return false;
+  }
+
+  Widget saatler() {
+    if (!doktorSecildimi())
+      return Center(
+          child: Text(
+        "ilk önce doktor seçiniz",
+        style: TextStyle(
+          fontSize: 17,
+          color: Colors.red,
+        ),
+      ));
+
+    return GridView.count(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      crossAxisCount: 3,
+      padding: const EdgeInsets.all(20.0),
+      crossAxisSpacing: 10.0,
+      childAspectRatio: MediaQuery.of(context).size.width /
+          (MediaQuery.of(context).size.height / 4),
+      children: List.generate(
+        14,
+        (index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                if (saatAktif[index] != false)
+                  setState(() {
+                    _secilenSaatId = index + 1;
+                  });
+              },
+              child: Material(
+                color: saatAraligiRenk(index),
+                elevation: 10,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                child: Container(
+                  child: Center(
+                    child: Text("" + saatAraligi[index]),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<int> RandevuAl(Randevu randevu) async {
+    var dbhelper = await DBHelper();
+    int randevuID = await dbhelper.insertRandevu(randevu.toMap());
+    return randevuID;
   }
 }

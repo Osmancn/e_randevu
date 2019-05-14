@@ -4,15 +4,15 @@ class Randevu {
   int hastaID;
   String randevuGunu;
   bool randevuDurum;
-  String randevuSaati;
+  int saatID;
 
   int get randevuID => _randevuID;
 
   Randevu(this.doktorID, this.hastaID, this.randevuGunu, this.randevuDurum,
-      this.randevuSaati);
+      this.saatID);
 
   Randevu.withID(this._randevuID, this.doktorID, this.hastaID, this.randevuGunu,
-      this.randevuDurum, this.randevuSaati);
+      this.randevuDurum, this.saatID);
 
   Randevu.fromMap(Map<String, dynamic> map) {
     _randevuID = int.parse(map['randevuID']);
@@ -20,7 +20,7 @@ class Randevu {
     hastaID = int.parse(map['hastaID']);
     randevuGunu = map['randevuGunu'];
     randevuDurum = map['randevuAktif'] == 1 ? true : false;
-    //TODO saat ıd saate çevir
+    saatID=int.parse(map['saatID'].toString());
   }
 
   Map<String,dynamic> toMap()
@@ -30,7 +30,7 @@ class Randevu {
     map['doktorID']=doktorID;
     map['hastaID']=hastaID;
     map['randevuGunu']=randevuGunu;
-    //todo saati saatID ye çevir map['randevuSaati']=randevuSaati;
+    map['saatID']=saatID;
     map['randevuAktif']=randevuDurum;
     return map;
   }
