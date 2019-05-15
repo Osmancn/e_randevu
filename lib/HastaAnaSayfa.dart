@@ -18,11 +18,11 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
 
   @override
   void initState() {
-      HastayiGetir(HastaAnaSayfa.hastaID).then((h) {
-        setState(() {
-          hasta = h;
-        });
+    HastayiGetir(HastaAnaSayfa.hastaID).then((h) {
+      setState(() {
+        hasta = h;
       });
+    });
     super.initState();
   }
 
@@ -52,12 +52,22 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
                 child: ListView(
                   children: <Widget>[
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         Navigator.pushNamed(context, "/RandevuSayfasi");
                       },
                       child: ListTile(
                         leading: Icon(Icons.add),
                         title: Text("Randevu Al"),
+                        trailing: Icon(Icons.navigate_next),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/HastaRandevular");
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.calendar_today),
+                        title: Text("Randevularım"),
                         trailing: Icon(Icons.navigate_next),
                       ),
                     )

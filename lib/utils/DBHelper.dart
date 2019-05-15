@@ -206,9 +206,37 @@ class DBHelper {
     var db = await _getDataBase();
     var randevuMap = await db
         .query("tbl_Randevu", where: 'randevuID = ?', whereArgs: [randevuID]);
-    var randevu=Randevu.fromMap(randevuMap[0]);
-    randevu.randevuDurum=false;
-    int id=await db.update('tbl_Randevu', randevu.toMap(),where: 'randevuID = ?',whereArgs: [randevuID]);
+    var randevu = Randevu.fromMap(randevuMap[0]);
+    randevu.randevuDurum = false;
+    int id = await db.update('tbl_Randevu', randevu.toMap(),
+        where: 'randevuID = ?', whereArgs: [randevuID]);
+    return id;
+  }
+
+  Future<List<Map<String, dynamic>>> getFavoriDoktor(
+      int doktorID, int hastaID) async {
+    var db = await _getDataBase();
+    var map = await db.query("tbl_FavoriDoktorlar",
+        where: 'doktorID = ? AND hastaID = ?', whereArgs: [doktorID, hastaID]);
+    return map;
+  }
+
+  Future<int> insertFavoriDoktor(int doktorID, int hastaID) async {
+    var db = await _getDataBase();
+    var map = Map<String, dynamic>();
+    map['hastaID'] = hastaID;
+    map['doktorID'] = doktorID;
+    var id = await db.insert("tbl_FavoriDoktorlar", map);
+    return id;
+  }
+
+  deleteFavoriDoktor(int doktorID, int hastaID) async {
+    var db = await _getDataBase();
+    var map = Map<String, dynamic>();
+    map['hastaID'] = hastaID;
+    map['doktorID'] = doktorID;
+    var id = await db.delete("tbl_FavoriDoktorlar",
+        where: 'doktorID = ? AND hastaID = ?', whereArgs: [doktorID, hastaID]);
     return id;
   }
 }

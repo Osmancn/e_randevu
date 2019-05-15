@@ -10,6 +10,7 @@ class HastaRandevular extends StatefulWidget {
 
 class _HastaRandevularState extends State<HastaRandevular> {
   var randevuListesi = List<Map<String, String>>();
+  var favoriMi = List<bool>();
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _HastaRandevularState extends State<HastaRandevular> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Material(
-              color: cardColor(index),
+              color: cardColor(randevuListesi.length-index-1),
               elevation: 10,
               borderRadius: BorderRadius.circular(10),
               child: Container(
@@ -49,17 +50,17 @@ class _HastaRandevularState extends State<HastaRandevular> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                    "Hastane : ${randevuListesi[index]['hastane']}\n"),
+                                    "Hastane : ${randevuListesi[randevuListesi.length-index-1]['hastane']}\n"),
                                 Text(
-                                    "Doktor : ${randevuListesi[index]['doktor']}\n"),
+                                    "Doktor : ${randevuListesi[randevuListesi.length-index-1]['doktor']}\n"),
                                 Text(
-                                    "Tarih : ${randevuListesi[index]['tarih']}  " +
-                                        "${randevuListesi[index]['saat']}"),
+                                    "Tarih : ${randevuListesi[randevuListesi.length-index-1]['tarih']}  " +
+                                        "${randevuListesi[randevuListesi.length-index-1]['saat']}"),
                               ],
                             )),
                       ],
                     ),
-                    cardButton(index),
+                    cardButton(randevuListesi.length-index-1),
                   ],
                 ),
               ),
@@ -84,8 +85,13 @@ class _HastaRandevularState extends State<HastaRandevular> {
       map['saat'] = s;
       map['tarih'] = list[i].randevuGunu;
       map['randevuID'] = list[i].randevuID.toString();
+      map['doktorID'] = list[i].doktorID.toString();
       map['durum'] = list[i].randevuDurum == true ? "1" : "0";
       mapler.add(map);
+      bool favMi = true;
+      var mapp = await db.getFavoriDoktor(list[i].doktorID, hastaID);
+      if (mapp.isEmpty) favMi = false;
+      favoriMi.add(favMi);
     }
     return mapler;
   }
@@ -93,8 +99,10 @@ class _HastaRandevularState extends State<HastaRandevular> {
   Color cardColor(int index) {
     if (randevuListesi[index]['durum'] == '0') return Colors.red.shade200;
     var split = randevuListesi[index]['tarih'].split(".");
-    DateTime tarih =
-        DateTime(int.parse(split[2]), int.parse(split[1]), int.parse(split[0]));
+    var split2 = randevuListesi[index]['saat'].split("-");
+    var split3 = split2[1].split(":");
+    DateTime tarih = DateTime(int.parse(split[2]), int.parse(split[1]),
+        int.parse(split[0]), int.parse(split3[0]), int.parse(split3[1]));
     if (tarih.isAfter(DateTime.now())) {
       return Colors.green.shade200;
     } else
@@ -106,7 +114,7 @@ class _HastaRandevularState extends State<HastaRandevular> {
     var split = randevuListesi[index]['tarih'].split(".");
     DateTime tarih =
         DateTime(int.parse(split[2]), int.parse(split[1]), int.parse(split[0]));
-    if (tarih.isAfter(DateTime.now())) {
+    if (tarih.isAfter(DateTime.now()))
       return Padding(
         padding: const EdgeInsets.all(20.0),
         child: RaisedButton(
@@ -161,14 +169,49 @@ class _HastaRandevularState extends State<HastaRandevular> {
           child: Text("iptal"),
         ),
       );
-    } else
+    else
       return Padding(
         padding: const EdgeInsets.all(20.0),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            debugPrint("tiklandi");
+            favoriDoktorMu(
+                    int.parse(randevuListesi[index]['doktorID'].toString()),
+                    HastaAnaSayfa.hastaID)
+                .then((kontrol) {
+              if (kontrol)
+                setState(() {
+                  favoriDoktoruSil(
+                          int.parse(
+                              randevuListesi[index]['doktorID'].toString()),
+                          HastaAnaSayfa.hastaID)
+                      .then((value) {
+                    debugPrint("silindi" + value.toString());
+                  });
+                  favoriMi[index] = false;
+                  for (int i = 0; i < randevuListesi.length; i++)
+                    if (randevuListesi[i]['doktorID'] ==
+                        randevuListesi[index]['doktorID']) favoriMi[i] = false;
+                });
+              else
+                setState(() {
+                  favoriDoktorlaraEkle(
+                          int.parse(
+                              randevuListesi[index]['doktorID'].toString()),
+                          HastaAnaSayfa.hastaID)
+                      .then((value) {
+                    debugPrint("eklendi " + value.toString());
+                  });
+                  favoriMi[index] = true;
+                  for (int i = 0; i < randevuListesi.length; i++)
+                    if (randevuListesi[i]['doktorID'] ==
+                        randevuListesi[index]['doktorID']) favoriMi[i] = true;
+                });
+            });
+          },
           child: Icon(
             Icons.favorite,
-            color: Colors.grey,
+            color: favoriMi[index] == true ? Colors.red : Colors.grey,
             size: 30,
           ),
         ),
@@ -178,6 +221,27 @@ class _HastaRandevularState extends State<HastaRandevular> {
   Future<int> RandevuIptal(int randevuID) async {
     var db = await DBHelper();
     int id = await db.randevuIptal(randevuID);
+    return id;
+  }
+
+  Future<bool> favoriDoktorMu(int doktorID, int hastaID) async {
+    var db = await DBHelper();
+    var map = await db.getFavoriDoktor(doktorID, hastaID);
+    if (map.isEmpty)
+      return false;
+    else
+      return true;
+  }
+
+  Future<int> favoriDoktorlaraEkle(int doktorID, int hastaID) async {
+    var db = await DBHelper();
+    int id = await db.insertFavoriDoktor(doktorID, hastaID);
+    return id;
+  }
+
+  Future<int> favoriDoktoruSil(int doktorID, int hastaID) async {
+    var db = await DBHelper();
+    int id = await db.deleteFavoriDoktor(doktorID, hastaID);
     return id;
   }
 }
