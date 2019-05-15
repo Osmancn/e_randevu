@@ -81,6 +81,13 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
                 ],
               ),
               RaisedButton(
+                child: Text("Randevularım"),
+                color: Colors.green.shade300,
+                onPressed: () {
+                  Navigator.pushNamed(context, "/HastaRandevular");
+                },
+              ),
+              RaisedButton(
                 child: Text("Randevu Al"),
                 color: Colors.green.shade300,
                 onPressed: () {

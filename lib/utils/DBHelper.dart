@@ -154,19 +154,61 @@ class DBHelper {
   Future<List<bool>> getSaatAktif(int doktorID, String gun) async {
     var db = await _getDataBase();
     var randevuMap = await db.query("tbl_Randevu",
-        where: 'doktorID = ? AND randevuGunu = ?', whereArgs: [doktorID, gun]);
-    var list=List<bool>(14);
-    for(int i=0;i<randevuMap.length;i++)
-      {
-        int index=int.parse(randevuMap[i]['saatID'].toString())-1;
-        list[index]=false;
-      }
+        where: 'doktorID = ? AND randevuGunu = ? AND randevuAktif = ?',
+        whereArgs: [doktorID, gun, 1]);
+    var list = List<bool>(14);
+    for (int i = 0; i < randevuMap.length; i++) {
+      int index = int.parse(randevuMap[i]['saatID'].toString()) - 1;
+      list[index] = false;
+    }
     return list;
   }
-  Future<int> insertRandevu(Map<String,dynamic> randevu)
-  async {
-    var db=await _getDataBase();
-    int randevuID=await db.insert("tbl_Randevu", randevu);
+
+  Future<int> insertRandevu(Map<String, dynamic> randevu) async {
+    var db = await _getDataBase();
+    int randevuID = await db.insert("tbl_Randevu", randevu);
     return randevuID;
+  }
+
+  Future<List<Randevu>> getHastaRandevular(int hastaID) async {
+    var db = await _getDataBase();
+    var randevularMap = await db
+        .query("tbl_Randevu", where: 'hastaID = ?', whereArgs: [hastaID]);
+    var randevuList = List<Randevu>();
+    for (int i = 0; i < randevularMap.length; i++) {
+      randevuList.add(Randevu.fromMap(randevularMap[i]));
+    }
+    return randevuList;
+  }
+
+  Future<Hastane> getHastaneByID(int hastaneID) async {
+    var db = await _getDataBase();
+    var hastaneMap = await db
+        .query("tbl_Hastane", where: 'hastaneID = ?', whereArgs: [hastaneID]);
+    return Hastane.fromMap(hastaneMap[0]);
+  }
+
+  Future<Doktor> getDoktorByID(int doktorID) async {
+    var db = await _getDataBase();
+    var doktorMap = await db
+        .query("tbl_Doktor", where: 'doktorID = ?', whereArgs: [doktorID]);
+    return Doktor.fromMap(doktorMap[0]);
+  }
+
+  Future<String> getSaatByID(int saatID) async {
+    var db = await _getDataBase();
+    var saatMap = await db
+        .query("tbl_RandevuSaat", where: 'saatID = ?', whereArgs: [saatID]);
+    return saatMap[0]['saatAraligi'].toString();
+  }
+
+  randevuIptal(int randevuID) async {
+    var db = await _getDataBase();
+    var randevuMap = await db
+        .query("tbl_Randevu", where: 'randevuID = ?', whereArgs: [randevuID]);
+    var randevu=Randevu.fromMap(randevuMap[0]);
+    randevu.randevuDurum=false;
+    int id=await db.update('tbl_Randevu', randevu.toMap(),where: 'randevuID = ?',whereArgs: [randevuID]);
+    return id;
   }
 }
