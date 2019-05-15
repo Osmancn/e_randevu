@@ -271,7 +271,7 @@ class _KayitOlState extends State<KayitOl> {
                         _validatorCinsiyet = "Cinsiyet seçiniz";
                     });
 
-                    if (_KayitOnayla() && _cinsiyet != null) {
+                    if (_kayitOnayla() && _cinsiyet != null) {
                       tcKontrol(_controllerTc.text.toString()).then((kontrol) {
                         if (kontrol) {
                           var hasta = Hasta(_ad, _soyad, _controllerTc.text.toString(), _sifre,
@@ -312,7 +312,7 @@ class _KayitOlState extends State<KayitOl> {
     );
   }
 
-  bool _KayitOnayla() {
+  bool _kayitOnayla() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       return true;
@@ -321,7 +321,7 @@ class _KayitOlState extends State<KayitOl> {
   }
 
   Future<bool> tcKontrol(String tc) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     var hasta = await db.getHastaByTc(tc);
     if (hasta == null)
       return true;
@@ -330,7 +330,7 @@ class _KayitOlState extends State<KayitOl> {
   }
 
   Future<int> hastaEkle(Hasta h) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     var hastaID = await db.insertHasta(h.toMap());
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Kayıt oluşturuldu"),

@@ -1,5 +1,4 @@
 import 'package:e_randevu/HastaAnaSayfa.dart';
-import 'package:e_randevu/models/Randevu.dart';
 import 'package:e_randevu/utils/DBHelper.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +32,7 @@ class _HastaRandevularState extends State<HastaRandevular> {
   }
 
   Future<List<Map<String, String>>> randevuListesiGetir(int hastaID) async {
-    var db = await DBHelper();
+    var db =  DBHelper();
     var list = await db.getHastaRandevular(hastaID);
     var mapler = List<Map<String, String>>();
     for (int i = 0; i < list.length; i++) {
@@ -104,7 +103,7 @@ class _HastaRandevularState extends State<HastaRandevular> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              RandevuIptal(int.parse(randevuListesi[index]
+                              randevuIptal(int.parse(randevuListesi[index]
                                           ['randevuID']
                                       .toString()))
                                   .then((value) {
@@ -179,14 +178,14 @@ class _HastaRandevularState extends State<HastaRandevular> {
       );
   }
 
-  Future<int> RandevuIptal(int randevuID) async {
-    var db = await DBHelper();
+  Future<int> randevuIptal(int randevuID) async {
+    var db = DBHelper();
     int id = await db.randevuIptal(randevuID);
     return id;
   }
 
   Future<bool> favoriDoktorMu(int doktorID, int hastaID) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     var map = await db.getFavoriDoktor(doktorID, hastaID);
     if (map.isEmpty)
       return false;
@@ -195,13 +194,13 @@ class _HastaRandevularState extends State<HastaRandevular> {
   }
 
   Future<int> favoriDoktorlaraEkle(int doktorID, int hastaID) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     int id = await db.insertFavoriDoktor(doktorID, hastaID);
     return id;
   }
 
   Future<int> favoriDoktoruSil(int doktorID, int hastaID) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     int id = await db.deleteFavoriDoktor(doktorID, hastaID);
     return id;
   }

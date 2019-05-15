@@ -30,7 +30,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
   @override
   void initState() {
     // TODO: implement initState
-    HastaleriGetir().then((hstneler) {
+    hastaleriGetir().then((hstneler) {
       setState(() {
         hastaneler = hstneler;
         _dDMenuItemHastane = getDropDownMenuHastane();
@@ -281,7 +281,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                                   "Hastane Adresi : ${_secilenHastane.hastaneAdresi}\n" +
                                   "Bölüm : ${_secilenBolum.bolumAdi}\n" +
                                   "Doktor : ${_secilenDoktor.ad} ${_secilenDoktor.soyad}\n" +
-                                  "Tarih : ${_secilenTarihString}\n" +
+                                  "Tarih : $_secilenTarihString\n" +
                                   "Saat : ${saatAraligi[_secilenSaatId - 1]}"),
                               SizedBox(height: 20),
                               Row(
@@ -300,7 +300,7 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                                   ),
                                   RaisedButton(
                                     onPressed: () {
-                                      RandevuAl(Randevu(
+                                      randevuAl(Randevu(
                                               _secilenDoktor.doktorID,
                                               HastaAnaSayfa.hastaID,
                                               _secilenTarihString,
@@ -341,20 +341,20 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
     );
   }
 
-  Future<List<Hastane>> HastaleriGetir() async {
-    var db = await DBHelper();
+  Future<List<Hastane>> hastaleriGetir() async {
+    var db = DBHelper();
     var hastanelerr = await db.getHastaneler();
     return hastanelerr;
   }
 
   Future<List<String>> saatAraligiGetir() async {
-    var db = await DBHelper();
+    var db = DBHelper();
     var s = await db.getSaatAraligi();
     return s;
   }
 
   Future<List<bool>> saatAktifGetir(int doktorID, String gun) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     var s = await db.getSaatAktif(doktorID, gun);
     return s;
   }
@@ -456,8 +456,8 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
     );
   }
 
-  Future<int> RandevuAl(Randevu randevu) async {
-    var dbhelper = await DBHelper();
+  Future<int> randevuAl(Randevu randevu) async {
+    var dbhelper = DBHelper();
     int randevuID = await dbhelper.insertRandevu(randevu.toMap());
     return randevuID;
   }

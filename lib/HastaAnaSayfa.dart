@@ -18,7 +18,7 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
 
   @override
   void initState() {
-    HastayiGetir(HastaAnaSayfa.hastaID).then((h) {
+    hastayiGetir(HastaAnaSayfa.hastaID).then((h) {
       setState(() {
         hasta = h;
       });
@@ -80,7 +80,27 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
                         title: Text("Favori Doktorlar"),
                         trailing: Icon(Icons.navigate_next),
                       ),
-                    )
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/HastaProfil");
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.account_box),
+                        title: Text("Profil"),
+                        trailing: Icon(Icons.navigate_next),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/GirisSayfasi");
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.exit_to_app),
+                        title: Text("Çıkış Yap"),
+                        trailing: Icon(Icons.navigate_before),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -121,8 +141,8 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
     );
   }
 
-  Future<Hasta> HastayiGetir(int id) async {
-    var db = await DBHelper();
+  Future<Hasta> hastayiGetir(int id) async {
+    var db = DBHelper();
     var h = await db.getHastaByID(id);
     return h;
   }

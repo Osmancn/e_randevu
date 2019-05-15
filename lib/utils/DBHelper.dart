@@ -252,14 +252,24 @@ class DBHelper {
     Doktor d = await getDoktorByID(doktorID);
     var db = await _getDataBase();
     var hbMap = await db.query("tbl_HastanedekiBolumler",
-        where: 'hastanedekiBolumlerID = ?', whereArgs: [d.hastanedekiBolumlerID]);
-    var map=Map<String,String>();
-    await getHastaneByID(int.parse(hbMap[0]['hastaneID'].toString())).then((hastane){
-      map['hastane']=hastane.hastaneAdi;
+        where: 'hastanedekiBolumlerID = ?',
+        whereArgs: [d.hastanedekiBolumlerID]);
+    var map = Map<String, String>();
+    await getHastaneByID(int.parse(hbMap[0]['hastaneID'].toString()))
+        .then((hastane) {
+      map['hastane'] = hastane.hastaneAdi;
     });
-    await getBolumByBolumID(int.parse(hbMap[0]['bolumID'].toString())).then((bolum){
-      map['bolum']=bolum.bolumAdi;
+    await getBolumByBolumID(int.parse(hbMap[0]['bolumID'].toString()))
+        .then((bolum) {
+      map['bolum'] = bolum.bolumAdi;
     });
     return map;
+  }
+
+  Future<int> updateHasta(Hasta hasta) async {
+    var db = await _getDataBase();
+    int id = await db.update("tbl_Hasta", hasta.toMap(),
+        where: 'hastaID = ?', whereArgs: [hasta.hastaId]);
+    return id;
   }
 }

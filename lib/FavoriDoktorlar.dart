@@ -25,14 +25,13 @@ class _FavoriDoktorlarState extends State<FavoriDoktorlar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Favori Doktorlarım")),
-      body: FavoriDoktorlarWidgets(),
+      body: favoriDoktorlarWidgets(),
     );
   }
 
   Future<List<Map<String, String>>> favoriDoktorlariGetir(int hastaID) async {
-    var db = await DBHelper();
+    var db =  DBHelper();
     var fMap = await db.getFavoriDoktorlarByHastaID(hastaID);
-    var list = List<Doktor>();
     var map = List<Map<String, String>>();
     for (int i = 0; i < fMap.length; i++) {
       var m = Map<String, String>();
@@ -48,7 +47,7 @@ class _FavoriDoktorlarState extends State<FavoriDoktorlar> {
     return map;
   }
 
-  Widget FavoriDoktorlarWidgets() {
+  Widget favoriDoktorlarWidgets() {
     if (favorilerMap.isEmpty)
       return Center(
         child: Text(
@@ -161,7 +160,7 @@ class _FavoriDoktorlarState extends State<FavoriDoktorlar> {
   }
 
   Future<int> favoriDoktoruSil(int doktorID, int hastaID) async {
-    var db = await DBHelper();
+    var db = DBHelper();
     int id = await db.deleteFavoriDoktor(doktorID, hastaID);
     return id;
   }
