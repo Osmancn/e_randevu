@@ -70,6 +70,16 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
                         title: Text("Randevularım"),
                         trailing: Icon(Icons.navigate_next),
                       ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/FavoriDoktorlar");
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.favorite),
+                        title: Text("Favori Doktorlar"),
+                        trailing: Icon(Icons.navigate_next),
+                      ),
                     )
                   ],
                 ),

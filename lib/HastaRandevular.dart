@@ -28,46 +28,7 @@ class _HastaRandevularState extends State<HastaRandevular> {
       appBar: AppBar(
         title: Text("Randevular"),
       ),
-      body: ListView.builder(
-        itemCount: randevuListesi.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Material(
-              color: cardColor(randevuListesi.length-index-1),
-              elevation: 10,
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                    "Hastane : ${randevuListesi[randevuListesi.length-index-1]['hastane']}\n"),
-                                Text(
-                                    "Doktor : ${randevuListesi[randevuListesi.length-index-1]['doktor']}\n"),
-                                Text(
-                                    "Tarih : ${randevuListesi[randevuListesi.length-index-1]['tarih']}  " +
-                                        "${randevuListesi[randevuListesi.length-index-1]['saat']}"),
-                              ],
-                            )),
-                      ],
-                    ),
-                    cardButton(randevuListesi.length-index-1),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+      body: randevularWidgets(),
     );
   }
 
@@ -243,5 +204,57 @@ class _HastaRandevularState extends State<HastaRandevular> {
     var db = await DBHelper();
     int id = await db.deleteFavoriDoktor(doktorID, hastaID);
     return id;
+  }
+
+  randevularWidgets()
+  {
+    if (randevuListesi.isEmpty)
+      return Center(
+        child: Text(
+          "Randevu Bulunmamakta",
+          style: TextStyle(fontSize: 24, color: Colors.red.shade300),
+        ),
+      );
+    else
+      return ListView.builder(
+        itemCount: randevuListesi.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Material(
+              color: cardColor(randevuListesi.length-index-1),
+              elevation: 10,
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                    "Hastane : ${randevuListesi[randevuListesi.length-index-1]['hastane']}\n"),
+                                Text(
+                                    "Doktor : ${randevuListesi[randevuListesi.length-index-1]['doktor']}\n"),
+                                Text(
+                                    "Tarih : ${randevuListesi[randevuListesi.length-index-1]['tarih']}  " +
+                                        "${randevuListesi[randevuListesi.length-index-1]['saat']}"),
+                              ],
+                            )),
+                      ],
+                    ),
+                    cardButton(randevuListesi.length-index-1),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
   }
 }

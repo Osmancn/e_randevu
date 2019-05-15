@@ -1,3 +1,4 @@
+import 'package:e_randevu/FavoriDoktorlar.dart';
 import 'package:e_randevu/GirisSayfasi.dart';
 import 'package:e_randevu/HastaAnaSayfa.dart';
 import 'package:e_randevu/HastaRandevular.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         "/GirisSayfasi":(context)=>GirisSayfasi(),
         "/RandevuSayfasi":(context)=>RandevuSayfasi(),
         "/HastaRandevular":(context)=>HastaRandevular(),
+        "/FavoriDoktorlar":(context)=>FavoriDoktorlar(),
       },
       onGenerateRoute: (route){
         var split=route.name.split("/");
