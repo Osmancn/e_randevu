@@ -1,3 +1,6 @@
+import 'package:e_randevu/AdminAnaSayfa.dart';
+import 'package:e_randevu/DoktorAnaSayfa.dart';
+import 'package:e_randevu/DoktorGirisSayfasi.dart';
 import 'package:e_randevu/FavoriDoktorlar.dart';
 import 'package:e_randevu/GirisSayfasi.dart';
 import 'package:e_randevu/HastaAnaSayfa.dart';
@@ -34,6 +37,7 @@ class MyApp extends StatelessWidget {
         "/HastaRandevular":(context)=>HastaRandevular(),
         "/FavoriDoktorlar":(context)=>FavoriDoktorlar(),
         "/HastaProfil":(context)=>HastaProfil(),
+        "/DoktorGirisSayfasi":(context)=>DoktorGirisSayfasi(),
       },
       onGenerateRoute: (route){
         var split=route.name.split("/");
@@ -42,6 +46,14 @@ class MyApp extends StatelessWidget {
             int hastaID=int.parse(split[2]);
             return MaterialPageRoute(builder: (context)=>HastaAnaSayfa(hastaID));
           }
+        else if(split[1]=="DoktorAnaSayfa"){
+          int doktorID=int.parse(split[2]);
+          return MaterialPageRoute(builder: (context)=>DoktorAnaSayfa(doktorID));
+        }
+        else if(split[1]=="AdminAnaSayfa"){
+          int adminID=int.parse(split[2]);
+          return MaterialPageRoute(builder: (context)=>AdminAnaSayfa(adminID));
+        }
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:e_randevu/models/Admin.dart';
 import 'package:e_randevu/models/Bolum.dart';
 import 'package:e_randevu/models/Doktor.dart';
 import 'package:e_randevu/models/Hasta.dart';
@@ -134,6 +135,26 @@ class DBHelper {
     }
     return null;
   }
+
+  Future<Doktor> getDoktorByTc(String tc)async{
+    var db = await _getDataBase();
+    var doktorMap = await db.query("tbl_Doktor");
+    for (int i = 0; i < doktorMap.length; i++) {
+      if (tc == doktorMap[i]['doktorTc']) return Doktor.fromMap(doktorMap[i]);
+    }
+
+    return null;
+  }
+
+  Future<Admin> getAdminByTc(String tc)async{
+    var db = await _getDataBase();
+    var adminMap = await db.query("tbl_Admin");
+    for (int i = 0; i < adminMap.length; i++) {
+      if (tc == adminMap[i]['adminTC']) return Admin.fromMap(adminMap[i]);
+    }
+    return null;
+  }
+
 
   Future<Hasta> getHastaByID(int id) async {
     var db = await _getDataBase();
@@ -272,4 +293,5 @@ class DBHelper {
         where: 'hastaID = ?', whereArgs: [hasta.hastaId]);
     return id;
   }
+
 }

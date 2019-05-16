@@ -1,17 +1,17 @@
 import 'package:e_randevu/utils/DBHelper.dart';
 import 'package:flutter/material.dart';
 
-class GirisSayfasi extends StatefulWidget {
+class DoktorGirisSayfasi extends StatefulWidget {
   @override
-  _GirisSayfasiState createState() => _GirisSayfasiState();
+  _DoktorGirisSayfasiState createState() => _DoktorGirisSayfasiState();
 }
 
-class _GirisSayfasiState extends State<GirisSayfasi> {
+class _DoktorGirisSayfasiState extends State<DoktorGirisSayfasi> {
   String _tc, _sifre;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool _autoVali = false;
-  int _hastaID;
+  int _doktorID, _adminID;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text("Kullanıcı Giris"),
+          title: Text("Doktor Giris"),
         ),
         body: Form(
           key: formKey,
@@ -85,8 +85,8 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                   obscureText: true,
                   autovalidate: _autoVali,
                   validator: (value) {
-                    if (value.length < 6)
-                      return "Şifre 6 karakterde küçük olmaz";
+                    if (value.length < 5)
+                      return "Şifre 5 karakterde küçük olmaz";
                     else
                       return null;
                   },
@@ -101,17 +101,26 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
                   onPressed: () {
                     _autoVali = true;
                     if (_girisOnayla()) {
-                      tcKontrol(_tc).then(
-                        (kontrol) {
-                          if (kontrol)
+                      adminTcKontrol(_tc).then(
+                        (adminKontrol) {
+                          if (adminKontrol)
                             Navigator.pushNamed(
-                                context, "/HastaAnaSayfa/$_hastaID");
+                                context, "/AdminAnaSayfa/$_adminID");
                           else
-                            scaffoldKey.currentState.showSnackBar(
-                              SnackBar(
-                                content: Text("Böyle Bir Hasta Kaydı Bulunamadı"),
-                                duration: Duration(seconds: 5),
-                              ),
+                            doktorTcKontrol(_tc).then(
+                              (doktorKontrol) {
+                                if (doktorKontrol)
+                                  Navigator.pushNamed(
+                                      context, "/DoktorAnaSayfa/$_doktorID");
+                                else
+                                  scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "Böyle Bir Doktor Kaydı Bulunamadı"),
+                                      duration: Duration(seconds: 5),
+                                    ),
+                                  );
+                              },
                             );
                         },
                       );
@@ -122,20 +131,10 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 90),
                 child: RaisedButton(
-                  child: Text("Kayıt Ol"),
+                  child: Text("Kullanıcı Giriş Sayfası"),
                   color: Colors.orange,
                   onPressed: () {
-                    Navigator.pushNamed(context, "/KayitOl");
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 90),
-                child: RaisedButton(
-                  child: Text("Doktor Giris Sayfasi"),
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/DoktorGirisSayfasi");
+                    Navigator.pushNamed(context, "/GirisSayfasi");
                   },
                 ),
               ),
@@ -155,13 +154,24 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
     return false;
   }
 
-  Future<bool> tcKontrol(String tc) async {
+  Future<bool> adminTcKontrol(String tc) async {
     var db = DBHelper();
-    var hasta = await db.getHastaByTc(tc);
-    if (hasta == null||hasta.sifre!=_sifre)
+    var admin = await db.getAdminByTc(tc);
+    if (admin == null || admin.sifre != _sifre)
       return false;
     else {
-      _hastaID = hasta.hastaId;
+      _adminID = admin.adminId;
+      return true;
+    }
+  }
+
+  Future<bool> doktorTcKontrol(String tc) async {
+    var db = DBHelper();
+    var doktor = await db.getDoktorByTc(tc);
+    if (doktor == null || doktor.sifre != _sifre)
+      return false;
+    else {
+      _doktorID = doktor.doktorID;
       return true;
     }
   }

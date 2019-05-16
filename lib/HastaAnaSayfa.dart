@@ -110,32 +110,34 @@ class _HastaAnaSayfaState extends State<HastaAnaSayfa> {
         appBar: AppBar(
           title: Text("Ana Sayfa"),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text("ad soyad :" + hasta.ad + " " + hasta.soyad),
-                  Text("tc : " + hasta.TC),
-                ],
-              ),
-              RaisedButton(
-                child: Text("Randevularım"),
-                color: Colors.green.shade300,
-                onPressed: () {
-                  Navigator.pushNamed(context, "/HastaRandevular");
-                },
-              ),
-              RaisedButton(
-                child: Text("Randevu Al"),
-                color: Colors.green.shade300,
-                onPressed: () {
-                  Navigator.pushNamed(context, "/RandevuSayfasi");
-                },
-              )
-            ],
-          ),
+        body: ListView(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text("ad soyad :" + hasta.ad + " " + hasta.soyad),
+                    Text("tc : " + hasta.TC),
+                  ],
+                ),
+                RaisedButton(
+                  child: Text("Randevularım"),
+                  color: Colors.green.shade300,
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/HastaRandevular");
+                  },
+                ),
+                RaisedButton(
+                  child: Text("Randevu Al"),
+                  color: Colors.green.shade300,
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/RandevuSayfasi");
+                  },
+                )
+              ],
+            ),
+          ],
         ),
       ),
     );
