@@ -136,7 +136,7 @@ class DBHelper {
     return null;
   }
 
-  Future<Doktor> getDoktorByTc(String tc)async{
+  Future<Doktor> getDoktorByTc(String tc) async {
     var db = await _getDataBase();
     var doktorMap = await db.query("tbl_Doktor");
     for (int i = 0; i < doktorMap.length; i++) {
@@ -146,7 +146,7 @@ class DBHelper {
     return null;
   }
 
-  Future<Admin> getAdminByTc(String tc)async{
+  Future<Admin> getAdminByTc(String tc) async {
     var db = await _getDataBase();
     var adminMap = await db.query("tbl_Admin");
     for (int i = 0; i < adminMap.length; i++) {
@@ -154,7 +154,6 @@ class DBHelper {
     }
     return null;
   }
-
 
   Future<Hasta> getHastaByID(int id) async {
     var db = await _getDataBase();
@@ -294,4 +293,21 @@ class DBHelper {
     return id;
   }
 
+  Future<int> updateDoktor(Doktor doktor) async {
+    var db = await _getDataBase();
+    int id = await db.update("tbl_Doktor", doktor.toMap(),
+        where: 'doktorID = ?', whereArgs: [doktor.doktorID]);
+    return id;
+  }
+
+  Future<List<Randevu>> getRandevularByDoktorID(int doktorID) async {
+    var db = await _getDataBase();
+    var randevularMap = await db
+        .query("tbl_Randevu", where: 'doktorID = ?', whereArgs: [doktorID]);
+    var randevuList = List<Randevu>();
+    for (int i = 0; i < randevularMap.length; i++) {
+      randevuList.add(Randevu.fromMap(randevularMap[i]));
+    }
+    return randevuList;
+  }
 }

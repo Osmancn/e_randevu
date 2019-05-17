@@ -21,126 +21,133 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        primarySwatch: Colors.green,
-        hintColor: Colors.green.shade300,
-        errorColor: Colors.red,
-      ),
-      child: Scaffold(
-        key: scaffoldKey,
-        appBar: AppBar(
-          title: Text("Kullanıcı Giris"),
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(false);
+      },
+      child: Theme(
+        data: ThemeData(
+          primarySwatch: Colors.green,
+          hintColor: Colors.green.shade300,
+          errorColor: Colors.red,
         ),
-        body: Form(
-          key: formKey,
-          child: ListView(
-            children: <Widget>[
-              SizedBox(height: 40),
-              //başlık
-              Center(
-                child: Text(
-                  "Giriş Yap",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
-                  ),
-                ),
-              ),
-              SizedBox(height: 40),
-              //tc no
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+        child: Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            title: Text("Kullanıcı Giris"),
+            automaticallyImplyLeading: false,
+          ),
+          body: Form(
+            key: formKey,
+            child: ListView(
+              children: <Widget>[
+                SizedBox(height: 40),
+                //başlık
+                Center(
+                  child: Text(
+                    "Giriş Yap",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
                     ),
-                    hintText: "TC kimlik numarasını giriniz",
-                    labelText: "TC",
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    prefixIcon: Icon(Icons.chrome_reader_mode),
                   ),
-                  maxLength: 11,
-                  keyboardType: TextInputType.number,
-                  autovalidate: _autoVali,
-                  validator: (value) => _validateTc(value),
-                  onSaved: (value) => _tc = value,
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                SizedBox(height: 40),
+                //tc no
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      hintText: "TC kimlik numarasını giriniz",
+                      labelText: "TC",
+                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      prefixIcon: Icon(Icons.chrome_reader_mode),
                     ),
-                    hintText: "Şifrenizi giriniz",
-                    labelText: "Şifre",
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    prefixIcon: Icon(Icons.lock_open),
+                    maxLength: 11,
+                    keyboardType: TextInputType.number,
+                    autovalidate: _autoVali,
+                    validator: (value) => _validateTc(value),
+                    onSaved: (value) => _tc = value,
                   ),
-                  maxLength: 16,
-                  obscureText: true,
-                  autovalidate: _autoVali,
-                  validator: (value) {
-                    if (value.length < 6)
-                      return "Şifre 6 karakterde küçük olmaz";
-                    else
-                      return null;
-                  },
-                  onSaved: (value) => _sifre = value,
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 90),
-                child: RaisedButton(
-                  child: Text("Giriş Yap"),
-                  color: Colors.blue,
-                  onPressed: () {
-                    _autoVali = true;
-                    if (_girisOnayla()) {
-                      tcKontrol(_tc).then(
-                        (kontrol) {
-                          if (kontrol)
-                            Navigator.pushNamed(
-                                context, "/HastaAnaSayfa/$_hastaID");
-                          else
-                            scaffoldKey.currentState.showSnackBar(
-                              SnackBar(
-                                content: Text("Böyle Bir Hasta Kaydı Bulunamadı"),
-                                duration: Duration(seconds: 5),
-                              ),
-                            );
-                        },
-                      );
-                    }
-                  },
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      hintText: "Şifrenizi giriniz",
+                      labelText: "Şifre",
+                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                      prefixIcon: Icon(Icons.lock_open),
+                    ),
+                    maxLength: 16,
+                    obscureText: true,
+                    autovalidate: _autoVali,
+                    validator: (value) {
+                      if (value.length < 6)
+                        return "Şifre 6 karakterde küçük olmaz";
+                      else
+                        return null;
+                    },
+                    onSaved: (value) => _sifre = value,
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 90),
-                child: RaisedButton(
-                  child: Text("Kayıt Ol"),
-                  color: Colors.orange,
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/KayitOl");
-                  },
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 90),
+                  child: RaisedButton(
+                    child: Text("Giriş Yap"),
+                    color: Colors.blue,
+                    onPressed: () {
+                      _autoVali = true;
+                      if (_girisOnayla()) {
+                        tcKontrol(_tc).then(
+                          (kontrol) {
+                            if (kontrol)
+                              Navigator.pushNamed(
+                                  context, "/HastaAnaSayfa/$_hastaID");
+                            else
+                              scaffoldKey.currentState.showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Böyle Bir Hasta Kaydı Bulunamadı"),
+                                  duration: Duration(seconds: 5),
+                                ),
+                              );
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 90),
-                child: RaisedButton(
-                  child: Text("Doktor Giris Sayfasi"),
-                  color: Colors.blue,
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/DoktorGirisSayfasi");
-                  },
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 90),
+                  child: RaisedButton(
+                    child: Text("Kayıt Ol"),
+                    color: Colors.orange,
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/KayitOl");
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-            ],
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 90),
+                  child: RaisedButton(
+                    child: Text("Doktor Giris Sayfasi"),
+                    color: Colors.blue,
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/DoktorGirisSayfasi");
+                    },
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -158,7 +165,7 @@ class _GirisSayfasiState extends State<GirisSayfasi> {
   Future<bool> tcKontrol(String tc) async {
     var db = DBHelper();
     var hasta = await db.getHastaByTc(tc);
-    if (hasta == null||hasta.sifre!=_sifre)
+    if (hasta == null || hasta.sifre != _sifre)
       return false;
     else {
       _hastaID = hasta.hastaId;

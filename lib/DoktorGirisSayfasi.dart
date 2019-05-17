@@ -15,7 +15,7 @@ class _DoktorGirisSayfasiState extends State<DoktorGirisSayfasi> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
   }
 
@@ -168,6 +168,7 @@ class _DoktorGirisSayfasiState extends State<DoktorGirisSayfasi> {
   Future<bool> doktorTcKontrol(String tc) async {
     var db = DBHelper();
     var doktor = await db.getDoktorByTc(tc);
+
     if (doktor == null || doktor.sifre != _sifre)
       return false;
     else {

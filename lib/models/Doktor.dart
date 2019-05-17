@@ -21,7 +21,7 @@ class Doktor{
     this._doktorID = int.parse(map['doktorID'].toString());
     this.ad = map['doktorAdi'].toString();
     this.soyad = map['doktorSoyadi'].toString();
-    this.TC = map['doktorTC'].toString();
+    this.TC = map['doktorTc'].toString();
     this.sifre = map['doktorSifre'].toString();
     this.email = map['doktorEmail'].toString();
     this.hastanedekiBolumlerID=int.parse(map['hastanedekiBolumlerID'].toString());
@@ -32,7 +32,7 @@ class Doktor{
     var map=Map<String,dynamic>();
     map['doktorAdi'] = ad;
     map['doktorSoyadi'] = soyad;
-    map['doktorTC'] = TC;
+    map['doktorTc'] = TC;
     map['doktorSifre'] = sifre;
     map['doktorEmail'] = email;
     map['hastanedekiBolumlerID']=hastanedekiBolumlerID;
