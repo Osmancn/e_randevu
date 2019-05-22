@@ -22,6 +22,7 @@ class _AdminAnaSayfaState extends State<AdminAnaSayfa> {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text("Admin"),
+            accountEmail: Text(""),
             currentAccountPicture: CircleAvatar(
               child: Center(
                   child: Text(
@@ -41,6 +42,16 @@ class _AdminAnaSayfaState extends State<AdminAnaSayfa> {
                   child: ListTile(
                     leading: Icon(Icons.local_hospital),
                     title: Text("Hastane İşlem"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/AdminBolumIslem");
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.local_hospital),
+                    title: Text("Bölüm İşlem"),
                     trailing: Icon(Icons.navigate_next),
                   ),
                 ),

@@ -337,4 +337,51 @@ class DBHelper {
         where: 'hastaneID = ?', whereArgs: [hastane.hastaneId]);
     return hastaneID;
   }
+
+  Future<int> insertBolum(Bolum bolum) async {
+    var db = await _getDataBase();
+    var bolumID = await db.insert("tbl_Bolum", bolum.toMap());
+    return bolumID;
+  }
+
+  Future<int> updateBolum(Bolum bolum) async {
+    var db = await _getDataBase();
+    var bolumID = await db.update("tbl_Bolum", bolum.toMap(),
+        where: 'bolumID = ?', whereArgs: [bolum.bolumID]);
+    return bolumID;
+  }
+
+  Future<int> deleteBolum(Bolum bolum) async {
+    var db = await _getDataBase();
+    var bolumID = await db
+        .delete("tbl_Bolum", where: 'bolumID = ?', whereArgs: [bolum.bolumID]);
+    return bolumID;
+  }
+
+  Future<List<Bolum>> getBolumler() async {
+    var db = await _getDataBase();
+    var bolumlerMap = await db.query("tbl_Bolum");
+    var bolumlerList = List<Bolum>();
+    for (int i = 0; i < bolumlerMap.length; i++) {
+      bolumlerList.add(Bolum.fromMap(bolumlerMap[i]));
+    }
+    return bolumlerList;
+  }
+
+  Future<int> insertHastanedekiBolumler(int hastaneID, int bolumID) async {
+    var db = await _getDataBase();
+    var map = Map<String, dynamic>();
+    map['hastaneID'] = hastaneID;
+    map['bolumID'] = bolumID;
+    var hbID = await db.insert("tbl_HastanedekiBolumler", map);
+    return hbID;
+  }
+
+  deleteHastanedekiBolumler(int hastaneID, int bolumID) async {
+    var db = await _getDataBase();
+    var hbID = await db.delete("tbl_HastanedekiBolumler",
+        where: 'hastaneID = ? AND bolumID = ?',
+        whereArgs: [hastaneID, bolumID]);
+    return hbID;
+  }
 }

@@ -261,7 +261,7 @@ class _AdminHastaneIslemState extends State<AdminHastaneIslem> {
                             onPressed: () {
                               if (_secilenHastane != null) {
                                 showDialog(
-                                  barrierDismissible: false,
+                                    barrierDismissible: false,
                                     context: context,
                                     builder: (context) {
                                       return SimpleDialog(
@@ -270,14 +270,23 @@ class _AdminHastaneIslemState extends State<AdminHastaneIslem> {
                                           Column(
                                             children: <Widget>[
                                               Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Text("Hastaneyi silmek hastanedeki bölümleri,bölümdeki " +
-                                                    "doktorları ve doktorların randevularını otomatik silmektedir." +
-                                                    "Hastane Silinsinmi",style: TextStyle(fontSize: 18),),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "Hastaneyi silmek hastanedeki bölümleri,bölümdeki " +
+                                                      "doktorları ve doktorların randevularını otomatik silmektedir." +
+                                                      "Hastane Silinsinmi",
+                                                  style:
+                                                      TextStyle(fontSize: 18),
+                                                ),
                                               ),
-                                              SizedBox(height: 10,),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
                                                 children: <Widget>[
                                                   Container(
                                                     child: RaisedButton(
@@ -325,7 +334,9 @@ class _AdminHastaneIslemState extends State<AdminHastaneIslem> {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(height: 10,),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                             ],
                                           )
                                         ],
