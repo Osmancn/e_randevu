@@ -310,4 +310,31 @@ class DBHelper {
     }
     return randevuList;
   }
+
+  getAdminByID(int adminID) async {
+    var db = await _getDataBase();
+    var adminMap =
+        await db.query("tbl_Admin", where: 'adminID = ?', whereArgs: [adminID]);
+    return Admin.fromMap(adminMap[0]);
+  }
+
+  Future<int> insertHastane(Hastane hastane) async {
+    var db = await _getDataBase();
+    var hastaneID = await db.insert("tbl_Hastane", hastane.toMap());
+    return hastaneID;
+  }
+
+  Future<int> updateHastane(Hastane hastane) async {
+    var db = await _getDataBase();
+    var hastaneID = await db.update("tbl_Hastane", hastane.toMap(),
+        where: 'hastaneID = ?', whereArgs: [hastane.hastaneId]);
+    return hastaneID;
+  }
+
+  Future<int> deleteHastane(Hastane hastane) async {
+    var db = await _getDataBase();
+    var hastaneID = await db.delete("tbl_Hastane",
+        where: 'hastaneID = ?', whereArgs: [hastane.hastaneId]);
+    return hastaneID;
+  }
 }

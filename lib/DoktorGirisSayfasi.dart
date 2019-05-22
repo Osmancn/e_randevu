@@ -30,7 +30,7 @@ class _DoktorGirisSayfasiState extends State<DoktorGirisSayfasi> {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text("Doktor Giris"),
+          title: Text("Doktor-Admin Giris"),
         ),
         body: Form(
           key: formKey,
