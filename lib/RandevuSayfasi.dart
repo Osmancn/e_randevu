@@ -124,10 +124,16 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                     onChanged: (value) {
                       setState(() {
                         _secilenBolum = value;
+                       doktorlariSirala(_secilenBolum.doktorlar).then((value){
+                         setState(() {
+                           _secilenBolum.doktorlar=value;
+                           _dDMenuItemDoktor = getDropDownMenuDoktor();
+                         });
+                       });
                         if (_dDMenuItemDoktor != null)
                           _dDMenuItemDoktor.clear();
                         _secilenDoktor = null;
-                        _dDMenuItemDoktor = getDropDownMenuDoktor();
+
                         _secilenSaatId = null;
                       });
                     },
@@ -209,6 +215,13 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
                           _secilenTarih.month.toString() +
                           "." +
                           _secilenTarih.year.toString();
+                      if(_secilenBolum!=null)
+                        doktorlariSirala(_secilenBolum.doktorlar).then((value){
+                          setState(() {
+                            _secilenBolum.doktorlar=value;
+                            _dDMenuItemDoktor = getDropDownMenuDoktor();
+                          });
+                        });
                       if (_secilenDoktor != null)
                         saatAktifGetir(
                                 _secilenDoktor.doktorID, _secilenTarihString)
@@ -460,5 +473,29 @@ class _RandevuSayfasiState extends State<RandevuSayfasi> {
     var dbhelper = DBHelper();
     int randevuID = await dbhelper.insertRandevu(randevu.toMap());
     return randevuID;
+  }
+
+  Future<List<Doktor>> doktorlariSirala(List<Doktor> doktorlist)async{
+    var db=DBHelper();
+    int enAz;
+    int index;
+    for(int i=0;i<doktorlist.length;i++)
+    {
+      index =i;
+      enAz=await db.getDoktorRandevuSayisi(doktorlist[i].doktorID,_secilenTarihString);
+      for(int j=i+1;j<doktorlist.length;j++)
+        {
+          int kontrol=await db.getDoktorRandevuSayisi(doktorlist[j].doktorID,_secilenTarihString);
+          if(kontrol<enAz)
+            {
+              index=j;
+              enAz=kontrol;
+            }
+        }
+      Doktor hold=doktorlist[i];
+      doktorlist[i]=doktorlist[index];
+      doktorlist[index]=hold;
+    }
+    return doktorlist;
   }
 }

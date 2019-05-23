@@ -580,4 +580,6 @@ class _AdminDoktorIslemState extends State<AdminDoktorIslem> {
     var doktorID = await db.deleteDoktor(doktor);
     return doktorID;
   }
+
+
 }

@@ -377,7 +377,7 @@ class DBHelper {
     return hbID;
   }
 
-   deleteHastanedekiBolumler(int hastaneID, int bolumID) async {
+  deleteHastanedekiBolumler(int hastaneID, int bolumID) async {
     var db = await _getDataBase();
     var hbID = await db.delete("tbl_HastanedekiBolumler",
         where: 'hastaneID = ? AND bolumID = ?',
@@ -393,17 +393,23 @@ class DBHelper {
     return int.parse(map[0]['hastanedekiBolumlerID'].toString());
   }
 
-  insertDoktor(Doktor doktor)
-  async{
-    var db=await _getDataBase();
-    var doktorID=await db.insert("tbl_Doktor", doktor.toMap());
-    return doktorID;
-  }
-  deleteDoktor(Doktor doktor)
-  async{
-    var db=await _getDataBase();
-    var doktorID=await db.delete("tbl_Doktor", where: 'doktorID = ?',whereArgs :[doktor.doktorID]);
+  insertDoktor(Doktor doktor) async {
+    var db = await _getDataBase();
+    var doktorID = await db.insert("tbl_Doktor", doktor.toMap());
     return doktorID;
   }
 
+  deleteDoktor(Doktor doktor) async {
+    var db = await _getDataBase();
+    var doktorID = await db.delete("tbl_Doktor",
+        where: 'doktorID = ?', whereArgs: [doktor.doktorID]);
+    return doktorID;
+  }
+
+  Future<int> getDoktorRandevuSayisi(int doktorID, String gun) async {
+    var db = await _getDataBase();
+    var map = await db.query("tbl_Randevu",
+        where: 'doktorID = ? AND randevuGunu = ?', whereArgs: [doktorID, gun]);
+    return map.length;
+  }
 }
