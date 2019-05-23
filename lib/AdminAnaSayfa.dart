@@ -55,6 +55,16 @@ class _AdminAnaSayfaState extends State<AdminAnaSayfa> {
                     trailing: Icon(Icons.navigate_next),
                   ),
                 ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, "/AdminDoktorIslem");
+                  },
+                  child: ListTile(
+                    leading: Icon(Icons.person),
+                    title: Text("Doktor İşlem"),
+                    trailing: Icon(Icons.navigate_next),
+                  ),
+                ),
 
                 InkWell(
                   onTap: () {

@@ -1,5 +1,6 @@
 import 'package:e_randevu/AdminAnaSayfa.dart';
 import 'package:e_randevu/AdminBolumIslem.dart';
+import 'package:e_randevu/AdminDoktorIslem.dart';
 import 'package:e_randevu/AdminHastaneIslem.dart';
 import 'package:e_randevu/DoktorAnaSayfa.dart';
 import 'package:e_randevu/DoktorGirisSayfasi.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         "/DoktorGirisSayfasi":(context)=>DoktorGirisSayfasi(),
         "/AdminHastaneIslem":(context)=>AdminHastaneIslem(),
         "/AdminBolumIslem":(context)=>AdminBolumIslem(),
+        "/AdminDoktorIslem":(context)=>AdminDoktorIslem(),
       },
       onGenerateRoute: (route){
         var split=route.name.split("/");

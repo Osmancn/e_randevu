@@ -46,7 +46,7 @@ class _AdminBolumIslemState extends State<AdminBolumIslem> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("Hastane İşlem"),
+        title: Text("Bölüm İşlem"),
       ),
       body: ListView(
         children: <Widget>[

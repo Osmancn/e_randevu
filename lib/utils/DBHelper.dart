@@ -377,11 +377,33 @@ class DBHelper {
     return hbID;
   }
 
-  deleteHastanedekiBolumler(int hastaneID, int bolumID) async {
+   deleteHastanedekiBolumler(int hastaneID, int bolumID) async {
     var db = await _getDataBase();
     var hbID = await db.delete("tbl_HastanedekiBolumler",
         where: 'hastaneID = ? AND bolumID = ?',
         whereArgs: [hastaneID, bolumID]);
     return hbID;
   }
+
+  Future<int> getHastanedekiBolumler(int hastaneID, int bolumID) async {
+    var db = await _getDataBase();
+    var map = await db.query("tbl_HastanedekiBolumler",
+        where: 'hastaneID = ? AND bolumID = ?',
+        whereArgs: [hastaneID, bolumID]);
+    return int.parse(map[0]['hastanedekiBolumlerID'].toString());
+  }
+
+  insertDoktor(Doktor doktor)
+  async{
+    var db=await _getDataBase();
+    var doktorID=await db.insert("tbl_Doktor", doktor.toMap());
+    return doktorID;
+  }
+  deleteDoktor(Doktor doktor)
+  async{
+    var db=await _getDataBase();
+    var doktorID=await db.delete("tbl_Doktor", where: 'doktorID = ?',whereArgs :[doktor.doktorID]);
+    return doktorID;
+  }
+
 }
